@@ -4,6 +4,15 @@
  * http://opensource.org/licenses/mit-license.php
  *************************************************/
 
+#include <cstdio>
+#include <cstdlib>
+
+#include <iostream>
+#include <string>
+
+#include <fstream>
+#include <sstream>
+
 #include "ShaderProgram.hpp"
 
 ShaderProgram::ShaderProgram()
@@ -51,6 +60,26 @@ bool ShaderProgram::InitProgram()
         return false;
     
     if( !this->AddShader( shader_fragment, GL_FRAGMENT_SHADER ) )
+        return false;
+    
+    if( !this->LinkProgram() )
+        return false;
+    
+    if( !this->UseProgram() )
+        return false;
+    
+    return true;
+}
+
+bool ShaderProgram::InitProgramFromFile( std::string fname_vertex, std::string fname_fragment )
+{
+    if( !this->CreateProgram() )
+        return false;
+    
+    if( !this->AddShaderFromFile( fname_vertex, GL_VERTEX_SHADER ) )
+        return false;
+    
+    if( !this->AddShaderFromFile( fname_fragment, GL_FRAGMENT_SHADER ) )
         return false;
     
     if( !this->LinkProgram() )
@@ -123,6 +152,28 @@ bool ShaderProgram::AddShader( std::string code, GLenum shaderType )
     glDeleteShader( shader );
     
     return true;
+}
+
+bool ShaderProgram::AddShaderFromFile( std::string file_name, GLenum shaderType )
+{
+    std::ifstream inFile( file_name.c_str(), std::ios::in );
+    
+    if( !inFile ) {
+        std::string text;
+        text = "Error opening file: ";
+        text += file_name;
+        
+        m_Log.push_back( text );
+        return false;
+    }
+    
+    std::stringstream code;
+    code << inFile.rdbuf();
+    inFile.close();
+    
+    std::string codeStr( code.str() );
+    
+    return AddShader( codeStr, shaderType );
 }
 
 bool ShaderProgram::LinkProgram()
@@ -200,12 +251,18 @@ bool ShaderProgram::DeleteProgram()
     return true;
 }
 
+void ShaderProgram::PrintLog()
+{
+    for( auto log : m_Log ) {
+        fprintf( stderr, "%s\n", log.c_str() );
+    }
+}
+
 void ShaderProgram::SetColor( float r, float g, float b )
 {
     float color[4] = { r, g, b, 1.0f };
     
     GLint uniform = glGetUniformLocation( m_Program, "color" );
-    
     glProgramUniform4fv( m_Program, uniform, 1, color );
 }
 

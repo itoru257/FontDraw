@@ -22,20 +22,26 @@ public:
     ~ShaderProgram();
     
     bool InitProgram();
+    bool InitProgramFromFile( std::string fname_vertex, std::string fname_fragment );
     bool DeleteProgram();
+    
+    bool CreateProgram();
+    bool AddShader( std::string code, GLenum shaderType );
+    bool AddShaderFromFile( std::string file_name, GLenum shaderType );
+    bool LinkProgram();
+    bool UseProgram();
     
     void SetColor( float r, float g, float b );
     void SetDataMatrix( ShapeData *data );
     void SetDataMatrix( std::vector< ShapeData > *datas );
     
+    void PrintLog();
+    
     GLuint m_Program;
     std::vector< std::string > m_Log;
     
 private:
-    bool CreateProgram();
-    bool AddShader( std::string code, GLenum shaderType );
-    bool LinkProgram();
-    bool UseProgram();
+
     
 };
 

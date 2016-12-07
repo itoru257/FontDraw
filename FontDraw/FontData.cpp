@@ -80,6 +80,127 @@ void FontData::DestroyFace()
     }
 }
 
+void FontData::PrintBitmap( Eigen::Matrix< unsigned char, Eigen::Dynamic, Eigen::Dynamic >& image )
+{
+    unsigned int i, j, data;
+    
+    for( i = 0; i < image.rows(); ++i ) {
+        for( j = 0; j < image.cols(); ++j ) {
+        
+            data = image( image.rows() - i - 1, j );
+            
+            if( data == 0 ) {
+                std::cout << "-";
+            } else if( data > 128 ) {
+                std::cout << "+";
+            } else {
+                std::cout << "*";
+            }
+            
+        }
+        
+        std::cout << std::endl;
+    }
+}
+
+bool FontData::CreateBitmap( const wchar_t *text, int pixel_size, Eigen::Matrix< unsigned char, Eigen::Dynamic, Eigen::Dynamic >& image )
+{
+    FT_Set_Pixel_Sizes( m_Face, 0, pixel_size );
+    
+    long x, y, ix, iy, w, h, y_min, y_max;
+    long i, j;
+    long buffer_size_x, buffer_size_y;
+    long origin_x, origin_y;
+    long bounds[4];
+    
+    buffer_size_x = pixel_size * ( static_cast< unsigned char >( wcslen( text ) ) + 2 ) + 2;
+    buffer_size_y = pixel_size * 2 + 2;
+    
+    Eigen::Matrix< unsigned char, Eigen::Dynamic, Eigen::Dynamic > buffer;
+    buffer = Eigen::Matrix< unsigned char, Eigen::Dynamic, Eigen::Dynamic >::Zero( buffer_size_x, buffer_size_y );
+    
+    bounds[0] = buffer_size_x;
+    bounds[1] = 0;
+    bounds[2] = buffer_size_y;
+    bounds[3] = 0;
+    
+    origin_x = 2;
+    origin_y = 2;
+    
+    for( const wchar_t *p = text; *p != '\0'; ++p ) {
+        
+        FT_Error error;
+        FT_UInt index;
+        
+        index = FT_Get_Char_Index( m_Face, *p );
+        error = FT_Load_Glyph( m_Face, index, FT_LOAD_RENDER );
+        
+        if( error )
+            return false;
+        
+        FT_GlyphSlot slot = m_Face->glyph;
+        FT_Bitmap *bitmap = &slot->bitmap;
+        
+        w = bitmap->width;
+        h = bitmap->rows;
+        
+        x = origin_x + slot->bitmap_left;
+        y = origin_y + slot->bitmap_top;
+        
+        y_min = buffer_size_y - ( y + h );
+        y_max = buffer_size_y - y;
+        
+        bounds[0] = ( bounds[0] < x )     ? bounds[0] : x;
+        bounds[1] = ( bounds[1] > x + w ) ? bounds[1] : x + w;
+        bounds[2] = ( bounds[2] < y_min ) ? bounds[2] : y_min;
+        bounds[3] = ( bounds[3] > y_max ) ? bounds[3] : y_max;
+        
+        for( i = 0, ix = x; i < w; ++i, ++ix ) {
+            for( j = 0, iy = y; j < h; ++j, ++iy ) {
+                
+                if( ix >= buffer_size_x || ix < 0 )
+                    continue;
+                
+                if( iy >= buffer_size_y || iy < 0 )
+                    continue;
+                
+                buffer( ix, buffer_size_y - iy ) = bitmap->buffer[j * bitmap->width + i];
+                
+            }
+        }
+        
+        origin_x += slot->advance.x / 64;
+        origin_y += slot->advance.y / 64;
+        
+    }
+    
+    bounds[0] -= 1;
+    bounds[1] += 1;
+    
+    bounds[2] -= 0;
+    bounds[3] += 2;
+    
+    bounds[0] = ( bounds[0] > 0 ) ? bounds[0] : 0;
+    bounds[1] = ( bounds[1] < buffer_size_x ) ? bounds[1] : buffer_size_x;
+    bounds[2] = ( bounds[2] > 0 ) ? bounds[2] : 0;
+    bounds[3] = ( bounds[3] < buffer_size_y ) ? bounds[3] : buffer_size_y;
+    
+    long image_size_x, image_size_y;
+    
+    image_size_x = bounds[1] - bounds[0];
+    image_size_y = bounds[3] - bounds[2];
+    
+    image = Eigen::Matrix< unsigned char, Eigen::Dynamic, Eigen::Dynamic >::Zero( image_size_y, image_size_x );
+    
+    for( i = 0, ix = bounds[0]; i < image_size_x; ++i, ++ix ) {
+        for( j = 0, iy = bounds[2]; j < image_size_y; ++j, ++iy ) {
+            image( j, i ) = buffer( ix, iy );
+        }
+    }
+    
+    return true;
+}
+
 void FontData::PrintOutlinePoint( std::vector< std::vector< std::vector< Eigen::Vector2d > > > *pOutlinePointList )
 {
     for( auto group : *pOutlinePointList ) {

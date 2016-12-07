@@ -32,6 +32,10 @@ public:
     
     static void PrintOutlinePoint( std::vector< std::vector< std::vector< Eigen::Vector2d > > > *pOutlinePointList );
     
+    bool CreateBitmap( const wchar_t *text, int pixel_size, Eigen::Matrix< unsigned char, Eigen::Dynamic, Eigen::Dynamic >& image );
+    
+    static void PrintBitmap( Eigen::Matrix< unsigned char, Eigen::Dynamic, Eigen::Dynamic >& image );
+    
 private:
     FT_Library  m_Library;
     FT_Face     m_Face;
