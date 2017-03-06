@@ -1,5 +1,5 @@
 /*************************************************
- * Copyright (c) 2017 Toru Ito
+ * Copyright (c) 2016 Toru Ito
  * Released under the MIT license
  * http://opensource.org/licenses/mit-license.php
  *************************************************/
@@ -21,6 +21,29 @@
 
 class FontData
 {
+ public:
+    struct BitmapData
+    {
+        unsigned int    width;
+        unsigned int    height;
+        unsigned char*  buffer;
+        
+        BitmapData()
+        {
+            width  = 0;
+            height = 0;
+            buffer = NULL;
+        }
+        
+        void Delete()
+        {
+            if( buffer != NULL ) {
+                free( buffer );
+                buffer = NULL;
+            }
+        }
+    };
+    
 public:
     FontData();
     ~FontData();
@@ -33,6 +56,8 @@ public:
     static void PrintOutlinePoint( std::vector< std::vector< std::vector< Eigen::Vector2d > > > *pOutlinePointList );
     
     bool CreateBitmap( const wchar_t *text, int pixel_size, Eigen::Matrix< unsigned char, Eigen::Dynamic, Eigen::Dynamic >& image );
+    
+    bool CreateBitmap( const wchar_t *text, int pixel_size, double r, double g, double b, BitmapData *bitmap );
     
     static void PrintBitmap( Eigen::Matrix< unsigned char, Eigen::Dynamic, Eigen::Dynamic >& image );
     

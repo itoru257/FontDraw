@@ -1,5 +1,5 @@
 /*************************************************
- * Copyright (c) 2017 Toru Ito
+ * Copyright (c) 2016 Toru Ito
  * Released under the MIT license
  * http://opensource.org/licenses/mit-license.php
  *************************************************/
@@ -14,7 +14,6 @@
 #include <sstream>
 
 #include "ShaderProgram.hpp"
-#include "TextureData.hpp"
 
 ShaderProgram::ShaderProgram()
     :m_Program(0)
@@ -88,74 +87,6 @@ bool ShaderProgram::InitProgramFromFile( std::string fname_vertex, std::string f
     
     if( !this->UseProgram() )
         return false;
-    
-    return true;
-}
-
-std::string shaderTexture_vertex =
-R"(
-#version 410
-
-layout(location = 0) in vec3 VertexPosition;
-layout(location = 1) in vec2 vertexUV;
-
-uniform mat4 DataMatrix;
-
-out vec2 Texcoord;
-
-void main()
-{
-    gl_Position = DataMatrix * vec4(VertexPosition,1.0);
-    Texcoord = vertexUV;
-}
-)";
-
-
-std::string shaderTexture_fragment =
-R"(
-#version 410
-
-in vec2 Texcoord;
-out vec4 outColor;
-
-uniform sampler2D Texture;
-
-void main()
-{
-    outColor = texture( Texture, Texcoord );
-}
-)";
-
-
-bool ShaderProgram::InitProgramTexture( Eigen::Matrix< unsigned char, Eigen::Dynamic, Eigen::Dynamic > image )
-{
-    if( !this->CreateProgram() )
-        return false;
-    
-    if( !this->AddShader( shaderTexture_vertex, GL_VERTEX_SHADER ) )
-        return false;
-    
-    if( !this->AddShader( shaderTexture_fragment, GL_FRAGMENT_SHADER ) )
-        return false;
-    
-    if( !this->LinkProgram() )
-        return false;
-    
-    if( !this->UseProgram() )
-        return false;
-    
-    glActiveTexture( GL_TEXTURE0 );
-    TextureData::CreateTexture( image, 1.0, 1.0, 1.0 );
-    glUniform1i( glGetUniformLocation( m_Program, "Texture" ), 0 );
-    
-    Eigen::Vector3f min = Eigen::Vector3f::Zero();
-    Eigen::Vector3f max = Eigen::Vector3f::Zero();
-    Eigen::Vector3f trans = Eigen::Vector3f( 0.0f, 0.0f, 0.0f );
-    
-    max[0] = (float)image.cols();
-    max[1] = (float)image.rows();
-    
-    SetDataMatrix( min, max, trans );
     
     return true;
 }
@@ -335,21 +266,7 @@ void ShaderProgram::SetColor( float r, float g, float b )
     glProgramUniform4fv( m_Program, uniform, 1, color );
 }
 
-void ShaderProgram::SetDataMatrix( Eigen::Vector3f min, Eigen::Vector3f max, Eigen::Vector3f trans )
-{
-    Eigen::Vector3f offset = ( ( max - min ) * 0.5 + min ) * - 1.0;
-    float scale = 1.5f / ( max - min ).maxCoeff();
-    
-    Eigen::Affine3f matrix = Eigen::Affine3f::Identity();
-    matrix.translate( trans );
-    matrix.scale( Eigen::Vector3f( scale, scale, scale ) );
-    matrix.translate( offset );
-    
-    GLint data_matrix = glGetUniformLocation( m_Program, "DataMatrix" );
-    glUniformMatrix4fv( data_matrix, 1, GL_FALSE, matrix.matrix().data() );
-}
-
-void ShaderProgram::SetDataMatrix( ShapeData *data, Eigen::Vector3f trans )
+void ShaderProgram::SetDataMatrix( ShapeData *data )
 {
     Eigen::Vector3f min = data->m_Vertex.colwise().minCoeff().cast<float>();
     Eigen::Vector3f max = data->m_Vertex.colwise().maxCoeff().cast<float>();
@@ -358,7 +275,6 @@ void ShaderProgram::SetDataMatrix( ShapeData *data, Eigen::Vector3f trans )
     float scale = 1.5f / ( max - min ).maxCoeff();
     
     Eigen::Affine3f matrix = Eigen::Affine3f::Identity();
-    matrix.translate( trans );
     matrix.scale( Eigen::Vector3f( scale, scale, scale ) );
     matrix.translate( offset );
     
@@ -366,7 +282,7 @@ void ShaderProgram::SetDataMatrix( ShapeData *data, Eigen::Vector3f trans )
     glUniformMatrix4fv( data_matrix, 1, GL_FALSE, matrix.matrix().data() );
 }
 
-void ShaderProgram::SetDataMatrix( std::vector< ShapeData > *datas, Eigen::Vector3f trans )
+void ShaderProgram::SetDataMatrix( std::vector< ShapeData > *datas )
 {
     Eigen::MatrixXd mins = Eigen::MatrixXd::Zero( datas->size(), 3 );
     Eigen::MatrixXd maxs = Eigen::MatrixXd::Zero( datas->size(), 3 );
@@ -384,11 +300,9 @@ void ShaderProgram::SetDataMatrix( std::vector< ShapeData > *datas, Eigen::Vecto
     float scale = 1.5f / ( max - min ).maxCoeff();
     
     Eigen::Affine3f matrix = Eigen::Affine3f::Identity();
-    matrix.translate( trans );
     matrix.scale( Eigen::Vector3f( scale, scale, scale ) );
     matrix.translate( offset );
     
     GLint data_matrix = glGetUniformLocation( m_Program, "DataMatrix" );
     glUniformMatrix4fv( data_matrix, 1, GL_FALSE, matrix.matrix().data() );
 }
-
