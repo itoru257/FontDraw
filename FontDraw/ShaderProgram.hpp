@@ -1,5 +1,5 @@
 /*************************************************
- * Copyright (c) 2017 Toru Ito
+ * Copyright (c) 2016 Toru Ito
  * Released under the MIT license
  * http://opensource.org/licenses/mit-license.php
  *************************************************/
@@ -11,7 +11,6 @@
 #include <string>
 #include <vector>
 
-#include <GLFW/glfw3.h>
 #include <OpenGL/gl3.h>
 
 #include "ShapeData.hpp"
@@ -24,8 +23,6 @@ public:
     
     bool InitProgram();
     bool InitProgramFromFile( std::string fname_vertex, std::string fname_fragment );
-    bool InitProgramTexture( Eigen::Matrix< unsigned char, Eigen::Dynamic, Eigen::Dynamic > image );
-    
     bool DeleteProgram();
     
     bool CreateProgram();
@@ -35,9 +32,8 @@ public:
     bool UseProgram();
     
     void SetColor( float r, float g, float b );
-    void SetDataMatrix( Eigen::Vector3f min, Eigen::Vector3f max, Eigen::Vector3f trans );
-    void SetDataMatrix( ShapeData *data, Eigen::Vector3f trans );
-    void SetDataMatrix( std::vector< ShapeData > *datas, Eigen::Vector3f trans );
+    void SetDataMatrix( ShapeData *data );
+    void SetDataMatrix( std::vector< ShapeData > *datas );
     
     void PrintLog();
     

@@ -1,5 +1,5 @@
 /*************************************************
- * Copyright (c) 2017 Toru Ito
+ * Copyright (c) 2016 Toru Ito
  * Released under the MIT license
  * http://opensource.org/licenses/mit-license.php
  *************************************************/
@@ -14,10 +14,12 @@ FontData::FontData()
     
 }
 
+
 FontData::~FontData()
 {
     
 }
+
 
 bool FontData::Init( std::string fname )
 {
@@ -30,11 +32,13 @@ bool FontData::Init( std::string fname )
     return true;
 }
 
+
 void FontData::Destroy()
 {
     DestroyFace();
     DestroyLibrary();
 }
+
 
 bool FontData::InitLibrary()
 {
@@ -48,12 +52,14 @@ bool FontData::InitLibrary()
     return true;
 }
 
+
 void FontData::DestroyLibrary()
 {
     if( m_Library ) {
         FT_Done_FreeType( m_Library );
     }
 }
+
 
 bool FontData::InitFace( std::string fname )
 {
@@ -73,12 +79,14 @@ bool FontData::InitFace( std::string fname )
     return true;
 }
 
+
 void FontData::DestroyFace()
 {
     if( m_Face ) {
         FT_Done_Face( m_Face );
     }
 }
+
 
 void FontData::PrintBitmap( Eigen::Matrix< unsigned char, Eigen::Dynamic, Eigen::Dynamic >& image )
 {
@@ -103,6 +111,7 @@ void FontData::PrintBitmap( Eigen::Matrix< unsigned char, Eigen::Dynamic, Eigen:
     }
 }
 
+
 bool FontData::CreateBitmap( const wchar_t *text, int pixel_size, Eigen::Matrix< unsigned char, Eigen::Dynamic, Eigen::Dynamic >& image )
 {
     FT_Set_Pixel_Sizes( m_Face, 0, pixel_size );
@@ -113,8 +122,8 @@ bool FontData::CreateBitmap( const wchar_t *text, int pixel_size, Eigen::Matrix<
     long origin_x, origin_y;
     long bounds[4];
     
-    buffer_size_x = pixel_size * ( static_cast< unsigned char >( wcslen( text ) ) + 2 );
-    buffer_size_y = pixel_size * 3;
+    buffer_size_x = pixel_size * ( static_cast< unsigned char >( wcslen( text ) ) + 2 ) + 2;
+    buffer_size_y = pixel_size * 2 + 2;
     
     Eigen::Matrix< unsigned char, Eigen::Dynamic, Eigen::Dynamic > buffer;
     buffer = Eigen::Matrix< unsigned char, Eigen::Dynamic, Eigen::Dynamic >::Zero( buffer_size_x, buffer_size_y );
@@ -145,7 +154,7 @@ bool FontData::CreateBitmap( const wchar_t *text, int pixel_size, Eigen::Matrix<
         h = bitmap->rows;
         
         x = origin_x + slot->bitmap_left;
-        y = origin_y + ( pixel_size * 2 - slot->bitmap_top );
+        y = origin_y + slot->bitmap_top;
         
         y_min = buffer_size_y - ( y + h );
         y_max = buffer_size_y - y;
@@ -201,6 +210,40 @@ bool FontData::CreateBitmap( const wchar_t *text, int pixel_size, Eigen::Matrix<
     return true;
 }
 
+
+bool FontData::CreateBitmap( const wchar_t *text, int pixel_size, double r, double g, double b, BitmapData *bitmap )
+{
+    Eigen::Matrix< unsigned char, Eigen::Dynamic, Eigen::Dynamic > data;
+    if( !this->CreateBitmap( text, pixel_size, data ))
+        return false;
+    
+    bitmap->width  = (int)data.cols();
+    bitmap->height = (int)data.rows();
+    
+    if( ( bitmap->buffer = (unsigned char *)calloc( bitmap->width * bitmap->height * 4, sizeof(unsigned char) ) ) == NULL )
+        return false;
+    
+    double color;
+    long   i, j, p;
+    
+    for( i = 0; i < bitmap->height; ++i ) {
+        for( j = 0; j < bitmap->width; ++j ) {
+        
+            p = ( j + i * bitmap->width ) * 4;
+            
+            color = (double)data( i, j );
+            bitmap->buffer[p+0] = (unsigned char)( color * r );
+            bitmap->buffer[p+1] = (unsigned char)( color * g );
+            bitmap->buffer[p+2] = (unsigned char)( color * b );
+            bitmap->buffer[p+3] = data( i, j );
+            
+        }
+    }
+    
+    return true;
+}
+
+
 void FontData::PrintOutlinePoint( std::vector< std::vector< std::vector< Eigen::Vector2d > > > *pOutlinePointList )
 {
     for( auto group : *pOutlinePointList ) {
@@ -214,6 +257,7 @@ void FontData::PrintOutlinePoint( std::vector< std::vector< std::vector< Eigen::
         }
     }
 }
+
 
 bool FontData::CreateOutlinePoint( const wchar_t *text, std::vector< std::vector< std::vector< Eigen::Vector2d > > > *pOutlinePointList )
 {
