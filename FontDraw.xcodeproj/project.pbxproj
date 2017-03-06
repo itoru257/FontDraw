@@ -14,6 +14,7 @@
 		166894A01DF3E27F005B30F6 /* OutlineFunction.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 166894981DF3E27F005B30F6 /* OutlineFunction.cpp */; };
 		166894A11DF3E27F005B30F6 /* ShaderProgram.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1668949A1DF3E27F005B30F6 /* ShaderProgram.cpp */; };
 		166894A21DF3E27F005B30F6 /* ShapeData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1668949C1DF3E27F005B30F6 /* ShapeData.cpp */; };
+		B59346F61E6D34E700CE46D2 /* TextureData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B59346F41E6D34E700CE46D2 /* TextureData.cpp */; };
 		B5B2C8F01DF12ECF004409A5 /* libfreetype.6.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = B5B2C8EF1DF12ECF004409A5 /* libfreetype.6.dylib */; };
 /* End PBXBuildFile section */
 
@@ -42,6 +43,8 @@
 		1668949C1DF3E27F005B30F6 /* ShapeData.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ShapeData.cpp; path = FontDraw/ShapeData.cpp; sourceTree = SOURCE_ROOT; };
 		1668949D1DF3E27F005B30F6 /* ShapeData.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = ShapeData.hpp; path = FontDraw/ShapeData.hpp; sourceTree = SOURCE_ROOT; };
 		169D12F81DE2C91B00EA19D6 /* FontDraw */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = FontDraw; sourceTree = BUILT_PRODUCTS_DIR; };
+		B59346F41E6D34E700CE46D2 /* TextureData.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TextureData.cpp; path = FontDraw/TextureData.cpp; sourceTree = SOURCE_ROOT; };
+		B59346F51E6D34E700CE46D2 /* TextureData.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = TextureData.hpp; path = FontDraw/TextureData.hpp; sourceTree = SOURCE_ROOT; };
 		B5B2C8EF1DF12ECF004409A5 /* libfreetype.6.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libfreetype.6.dylib; path = ../../../../../usr/local/lib/libfreetype.6.dylib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -66,6 +69,8 @@
 				1668949B1DF3E27F005B30F6 /* ShaderProgram.hpp */,
 				1668949C1DF3E27F005B30F6 /* ShapeData.cpp */,
 				1668949D1DF3E27F005B30F6 /* ShapeData.hpp */,
+				B59346F41E6D34E700CE46D2 /* TextureData.cpp */,
+				B59346F51E6D34E700CE46D2 /* TextureData.hpp */,
 			);
 			name = Draw;
 			sourceTree = "<group>";
@@ -179,6 +184,7 @@
 				1668949F1DF3E27F005B30F6 /* main.cpp in Sources */,
 				166894A11DF3E27F005B30F6 /* ShaderProgram.cpp in Sources */,
 				1668949E1DF3E27F005B30F6 /* FontData.cpp in Sources */,
+				B59346F61E6D34E700CE46D2 /* TextureData.cpp in Sources */,
 				166894A21DF3E27F005B30F6 /* ShapeData.cpp in Sources */,
 				166894A01DF3E27F005B30F6 /* OutlineFunction.cpp in Sources */,
 			);

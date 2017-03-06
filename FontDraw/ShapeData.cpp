@@ -109,7 +109,7 @@ void ShapeData::InitDraw()
     glBindBuffer( GL_ARRAY_BUFFER, m_VertexBufferObject );
     glBufferData( GL_ARRAY_BUFFER, sizeof(double)*m_Vertex.size(), m_Vertex.data(), GL_STATIC_DRAW );
     
-    glGenBuffers(1, &m_IndexBufferObject );
+    glGenBuffers( 1, &m_IndexBufferObject );
     glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, m_IndexBufferObject );
     glBufferData( GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int)*m_Index.size(), m_Index.data(), GL_STATIC_DRAW );
     
