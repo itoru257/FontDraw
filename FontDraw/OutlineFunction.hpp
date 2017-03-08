@@ -34,7 +34,7 @@ public:
             type     = "";
             point    = Eigen::Vector2d::Zero();
             control1 = Eigen::Vector2d::Zero();
-            control1 = Eigen::Vector2d::Zero();
+            control2 = Eigen::Vector2d::Zero();
         }
     };
     
