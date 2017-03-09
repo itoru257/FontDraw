@@ -137,7 +137,7 @@ void OutlineFunction::CreateOutlinePoint()
             
             points.push_back( outline.point );
             
-        } else if( outline.type == "ConicTo" ) {
+        } else if( outline.type == "ConicTo" && !points.empty() ) {
             
             start = points.back();
             
@@ -157,7 +157,7 @@ void OutlineFunction::CreateOutlinePoint()
                 
             }
             
-        } else if( outline.type == "CubicTo" ) {
+        } else if( outline.type == "CubicTo" && !points.empty() ) {
             
             start = points.back();
             

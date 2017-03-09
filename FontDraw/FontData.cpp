@@ -9,17 +9,22 @@
 
 #include "OutlineFunction.hpp"
 
+#if defined(_WIN32)
+#include "afxwin.h"
+#include "afxcmn.h"
+#endif
+
 FontData::FontData()
+	:m_FontBufferSize( 0 )
 {
-    
+	m_FontBuffer = NULL;
 }
 
 FontData::~FontData()
 {
-    
 }
 
-bool FontData::Init( std::string fname )
+bool FontData::InitFromFile( std::string fname )
 {
     if( !InitLibrary() )
         return false;
@@ -30,17 +35,150 @@ bool FontData::Init( std::string fname )
     return true;
 }
 
+unsigned long FontData::FontReadMemory( FT_Stream stream, unsigned long offset, unsigned char *buffer, unsigned long count )
+{
+    if( count <= 0 ) return 0;
+
+	unsigned long i, pos;
+    unsigned char *data;
+	
+	data = static_cast<unsigned char *>( stream->descriptor.pointer );
+
+	for( i = 0, pos = offset; i < count; ++i, ++pos ) {
+		buffer[i] = data[pos];
+	}
+
+    return count;
+}
+
+#if defined(_WIN32)
+
+bool FontData::InitFromWindowsFont( std::string FontName )
+{
+	if( !InitLibrary() )
+		return false;
+
+	bool result = false;
+	auto commonDC = CreateCompatibleDC( nullptr );
+
+	HFONT font = CreateFontA( 
+		-12,
+		0,
+		0, 
+		0, 
+		FW_REGULAR, 
+		FALSE, 
+		FALSE,
+		FALSE, 
+		DEFAULT_CHARSET, 
+		OUT_DEFAULT_PRECIS, 
+		CLIP_DEFAULT_PRECIS,
+		DEFAULT_QUALITY, 
+		DEFAULT_PITCH | FF_DONTCARE,
+		FontName.c_str()
+		);
+
+    SelectObject( commonDC, font );
+
+	DWORD fontDataSize;
+
+    fontDataSize = GetFontData( commonDC, 0x66637474, 0, nullptr, 0 );
+
+	if( ( fontDataSize > 0 ) && ( fontDataSize != GDI_ERROR ) ) {
+
+		m_FontBuffer     = new unsigned char[fontDataSize];
+		m_FontBufferSize = fontDataSize;
+
+		if( GetFontData( commonDC, 0x66637474, 0, m_FontBuffer, fontDataSize ) != GDI_ERROR ) {
+			result = true;
+		}
+
+	} else {
+
+		fontDataSize = GetFontData( commonDC, 0, 0, nullptr, 0 );
+
+		if( ( fontDataSize > 0 ) && ( fontDataSize != GDI_ERROR ) ) {
+
+			m_FontBuffer     = new unsigned char[fontDataSize];
+			m_FontBufferSize = fontDataSize;
+
+			if( GetFontData( commonDC, 0, 0, m_FontBuffer, fontDataSize ) != GDI_ERROR ) {
+				result = true;
+			}
+
+		} 
+
+	}
+
+    DeleteObject( font );
+    DeleteDC( commonDC );
+
+	if( !result )
+		return false;
+
+	FT_Error error;
+	result = true;
+
+	if( error = FT_New_Memory_Face( m_Library, m_FontBuffer, m_FontBufferSize, 0, &m_Face ) ) {
+		result = false;
+	}
+
+	/*
+	//“Ç‚Ýž‚Ý
+	memset(&m_Stream, 0, sizeof(m_Stream));
+	FT_StreamRec *stream = &m_Stream;
+
+	stream->base = 0;
+	stream->pos = 0;
+	stream->size = fontDataSize;
+	stream->descriptor.pointer = m_FontBuffer;
+	stream->read  = FontReadMemory;
+	stream->close = nullptr;
+
+	int index = 0;
+
+	while( true ) {
+
+		FT_Open_Args args;
+		memset(&args, 0, sizeof(args));
+
+		args.flags = FT_OPEN_STREAM;
+		args.stream = stream;
+		args.driver = 0;
+		args.num_params = 0;
+		args.params = NULL;
+
+		if( error = FT_Open_Face( m_Library, &args, index, &m_Face ) ) {
+			result = false;
+			break;
+		}
+
+		index++;
+
+		break;
+	}
+	*/
+
+	return result;
+}
+
+#endif
+
 void FontData::Destroy()
 {
     DestroyFace();
     DestroyLibrary();
+
+	if( m_FontBuffer != NULL ) {
+		delete m_FontBuffer;
+		m_FontBuffer     = NULL;
+		m_FontBufferSize = 0;
+	}
 }
 
 bool FontData::InitLibrary()
 {
-    FT_Error error;
-    
-    error = FT_Init_FreeType( &m_Library );
+    FT_Error error = FT_Init_FreeType( &m_Library );
     
     if( error )
         return false;
@@ -63,7 +201,13 @@ bool FontData::InitFace( std::string fname )
                         fname.c_str(),
                         0,
                         &m_Face );
-    
+
+	//FT_Open_Args args;
+	//args.flags = FT_OPEN_PATHNAME;
+	//args.pathname = (FT_String*)fname.c_str();
+
+	//error = FT_Open_Face( m_Library, &args, 0, &m_Face );
+
     if ( error == FT_Err_Unknown_File_Format ) {
         return false;
     } else if ( error ) {

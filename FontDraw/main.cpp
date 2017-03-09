@@ -49,7 +49,7 @@ int main(int argc, const char * argv[])
     
     //Font
     FontData font;
-    if( !font.Init( "/Library/Fonts/Arial Unicode.ttf" ) )
+    if( !font.InitFromFile( "/Library/Fonts/Arial Unicode.ttf" ) )
         return -1;
     
     //texture
@@ -116,7 +116,7 @@ int main(int argc, const char * argv[])
     
     // Font
     FontData font;
-    if( !font.Init( "/Library/Fonts/Arial Unicode.ttf" ) )
+    if( !font.InitFromFile( "/Library/Fonts/Arial Unicode.ttf" ) )
         return -1;
     
     std::vector< std::vector< std::vector< Eigen::Vector2d > > > OutlinePointList;

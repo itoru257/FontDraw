@@ -33,7 +33,7 @@
 /* Begin PBXFileReference section */
 		166894911DF2A3DC005B30F6 /* libglfw3.3.2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libglfw3.3.2.dylib; path = ../../../../../usr/local/lib/libglfw3.3.2.dylib; sourceTree = "<group>"; };
 		166894931DF2A4AA005B30F6 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
-		166894951DF3E27F005B30F6 /* FontData.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = FontData.cpp; path = FontDraw/FontData.cpp; sourceTree = SOURCE_ROOT; };
+		166894951DF3E27F005B30F6 /* FontData.cpp */ = {isa = PBXFileReference; fileEncoding = 2147483649; lastKnownFileType = sourcecode.cpp.cpp; name = FontData.cpp; path = FontDraw/FontData.cpp; sourceTree = SOURCE_ROOT; };
 		166894961DF3E27F005B30F6 /* FontData.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = FontData.hpp; path = FontDraw/FontData.hpp; sourceTree = SOURCE_ROOT; };
 		166894971DF3E27F005B30F6 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = main.cpp; path = FontDraw/main.cpp; sourceTree = SOURCE_ROOT; };
 		166894981DF3E27F005B30F6 /* OutlineFunction.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = OutlineFunction.cpp; path = FontDraw/OutlineFunction.cpp; sourceTree = SOURCE_ROOT; };
@@ -150,7 +150,7 @@
 		169D12F01DE2C91B00EA19D6 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0810;
+				LastUpgradeCheck = 0820;
 				ORGANIZATIONNAME = "toru ito";
 				TargetAttributes = {
 					169D12F71DE2C91B00EA19D6 = {
@@ -211,6 +211,7 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_SUSPICIOUS_MOVES = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -258,6 +259,7 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_SUSPICIOUS_MOVES = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;

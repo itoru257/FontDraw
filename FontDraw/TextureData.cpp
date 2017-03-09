@@ -100,7 +100,7 @@ GLuint TextureData::CreateTexture( Eigen::Matrix< unsigned char, Eigen::Dynamic,
     
     unsigned char *data;
     
-    if( ( data = (unsigned char *)calloc( image.rows() * image.cols() * 4, sizeof(unsigned char))) == NULL )
+    if( ( data = (unsigned char *)calloc( image.rows() * image.cols() * 4, sizeof(unsigned char) ) ) == NULL )
         return 0;
     
     long i, j, p;
