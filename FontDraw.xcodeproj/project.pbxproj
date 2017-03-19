@@ -7,7 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		166894921DF2A3DC005B30F6 /* libglfw3.3.2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 166894911DF2A3DC005B30F6 /* libglfw3.3.2.dylib */; };
+		160E45C51E7CDFBA00C80EEE /* libglfw.3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 160E45C41E7CDFBA00C80EEE /* libglfw.3.dylib */; };
+		160E45C71E7CDFD400C80EEE /* libfreetype.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 160E45C61E7CDFD400C80EEE /* libfreetype.dylib */; };
 		166894941DF2A4AA005B30F6 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 166894931DF2A4AA005B30F6 /* OpenGL.framework */; };
 		1668949E1DF3E27F005B30F6 /* FontData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 166894951DF3E27F005B30F6 /* FontData.cpp */; };
 		1668949F1DF3E27F005B30F6 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 166894971DF3E27F005B30F6 /* main.cpp */; };
@@ -15,7 +16,6 @@
 		166894A11DF3E27F005B30F6 /* ShaderProgram.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1668949A1DF3E27F005B30F6 /* ShaderProgram.cpp */; };
 		166894A21DF3E27F005B30F6 /* ShapeData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1668949C1DF3E27F005B30F6 /* ShapeData.cpp */; };
 		B59346F61E6D34E700CE46D2 /* TextureData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B59346F41E6D34E700CE46D2 /* TextureData.cpp */; };
-		B5B2C8F01DF12ECF004409A5 /* libfreetype.6.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = B5B2C8EF1DF12ECF004409A5 /* libfreetype.6.dylib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -31,7 +31,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		166894911DF2A3DC005B30F6 /* libglfw3.3.2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libglfw3.3.2.dylib; path = ../../../../../usr/local/lib/libglfw3.3.2.dylib; sourceTree = "<group>"; };
+		160E45C41E7CDFBA00C80EEE /* libglfw.3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libglfw.3.dylib; path = ../../../../../usr/local/lib/libglfw.3.dylib; sourceTree = "<group>"; };
+		160E45C61E7CDFD400C80EEE /* libfreetype.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libfreetype.dylib; path = ../../../../../usr/local/lib/libfreetype.dylib; sourceTree = "<group>"; };
 		166894931DF2A4AA005B30F6 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 		166894951DF3E27F005B30F6 /* FontData.cpp */ = {isa = PBXFileReference; fileEncoding = 2147483649; lastKnownFileType = sourcecode.cpp.cpp; name = FontData.cpp; path = FontDraw/FontData.cpp; sourceTree = SOURCE_ROOT; };
 		166894961DF3E27F005B30F6 /* FontData.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = FontData.hpp; path = FontDraw/FontData.hpp; sourceTree = SOURCE_ROOT; };
@@ -45,7 +46,6 @@
 		169D12F81DE2C91B00EA19D6 /* FontDraw */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = FontDraw; sourceTree = BUILT_PRODUCTS_DIR; };
 		B59346F41E6D34E700CE46D2 /* TextureData.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TextureData.cpp; path = FontDraw/TextureData.cpp; sourceTree = SOURCE_ROOT; };
 		B59346F51E6D34E700CE46D2 /* TextureData.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = TextureData.hpp; path = FontDraw/TextureData.hpp; sourceTree = SOURCE_ROOT; };
-		B5B2C8EF1DF12ECF004409A5 /* libfreetype.6.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libfreetype.6.dylib; path = ../../../../../usr/local/lib/libfreetype.6.dylib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -54,8 +54,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				166894941DF2A4AA005B30F6 /* OpenGL.framework in Frameworks */,
-				B5B2C8F01DF12ECF004409A5 /* libfreetype.6.dylib in Frameworks */,
-				166894921DF2A3DC005B30F6 /* libglfw3.3.2.dylib in Frameworks */,
+				160E45C71E7CDFD400C80EEE /* libfreetype.dylib in Frameworks */,
+				160E45C51E7CDFBA00C80EEE /* libglfw.3.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -117,9 +117,9 @@
 		169D13021DE2C93300EA19D6 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				160E45C61E7CDFD400C80EEE /* libfreetype.dylib */,
+				160E45C41E7CDFBA00C80EEE /* libglfw.3.dylib */,
 				166894931DF2A4AA005B30F6 /* OpenGL.framework */,
-				166894911DF2A3DC005B30F6 /* libglfw3.3.2.dylib */,
-				B5B2C8EF1DF12ECF004409A5 /* libfreetype.6.dylib */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";

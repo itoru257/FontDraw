@@ -26,9 +26,6 @@ void TextureData::InitDraw( int w, int h )
         0.0f,  0.0f,   0.0f,
         0.0f,  height, 0.0f,
         width, 0.0f,   0.0f,
-        
-        width, 0.0f,   0.0f,
-        0.0f,  height, 0.0f,
         width, height, 0.0f,
     };
     
@@ -36,19 +33,16 @@ void TextureData::InitDraw( int w, int h )
         0.0f, 0.0f,
         0.0f, 1.0f,
         1.0f, 0.0f,
-        
-        1.0f, 0.0f,
-        0.0f, 1.0f,
         1.0f, 1.0f,
     };
 
     glGenBuffers( 1, &m_VertexBufferObject );
     glBindBuffer(GL_ARRAY_BUFFER, m_VertexBufferObject);
-    glBufferData(GL_ARRAY_BUFFER, 18 * sizeof(float), positionData, GL_STATIC_DRAW );
+    glBufferData(GL_ARRAY_BUFFER, 12 * sizeof(float), positionData, GL_STATIC_DRAW );
     
     glGenBuffers( 1, &m_TextureBufferObject );
     glBindBuffer(GL_ARRAY_BUFFER, m_TextureBufferObject);
-    glBufferData(GL_ARRAY_BUFFER, 12 * sizeof(float), textureData, GL_STATIC_DRAW );
+    glBufferData(GL_ARRAY_BUFFER, 8 * sizeof(float), textureData, GL_STATIC_DRAW );
     
 
     glGenVertexArrays( 1, &m_VertexArrayObject );
@@ -69,8 +63,7 @@ void TextureData::InitDraw( int w, int h )
 void TextureData::Draw()
 {
     glBindVertexArray( m_VertexArrayObject );
-    glDrawArrays( GL_TRIANGLES, 0, 3 );
-    glDrawArrays( GL_TRIANGLES, 3, 3 );
+    glDrawArrays( GL_TRIANGLE_STRIP, 0, 4 );
 }
 
 void TextureData::DeleteDraw()

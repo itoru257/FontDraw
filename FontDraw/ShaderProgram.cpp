@@ -127,7 +127,7 @@ void main()
 )";
 
 
-bool ShaderProgram::InitProgramTexture( Eigen::Matrix< unsigned char, Eigen::Dynamic, Eigen::Dynamic > image )
+bool ShaderProgram::InitProgramTexture( Eigen::Matrix< unsigned char, Eigen::Dynamic, Eigen::Dynamic > image, Eigen::Vector3f trans )
 {
     if( !this->CreateProgram() )
         return false;
@@ -150,7 +150,6 @@ bool ShaderProgram::InitProgramTexture( Eigen::Matrix< unsigned char, Eigen::Dyn
     
     Eigen::Vector3f min = Eigen::Vector3f::Zero();
     Eigen::Vector3f max = Eigen::Vector3f::Zero();
-    Eigen::Vector3f trans = Eigen::Vector3f( 0.0f, 0.0f, 0.0f );
     
     max[0] = (float)image.cols();
     max[1] = (float)image.rows();

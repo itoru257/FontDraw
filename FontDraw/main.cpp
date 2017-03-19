@@ -58,10 +58,28 @@ int main(int argc, const char * argv[])
         return -1;
     
     ShaderProgram TexProgram;
-    TexProgram.InitProgramTexture( image );
+    if( !TexProgram.InitProgramTexture( image, Eigen::Vector3f( 0.0f, - 0.25f, 0.0f ) ) )
+        return -1;
     
     TextureData texture;
     texture.InitDraw( (int)image.cols(), (int)image.rows() );
+    
+    //outline
+    std::vector< std::vector< std::vector< Eigen::Vector2d > > > OutlinePointList;
+    if( !font.CreateOutlinePoint( L"あいうえお", &OutlinePointList ) )
+        return -1;
+    
+    ShaderProgram outlineProgram;
+    if( !outlineProgram.InitProgram() )
+        return -1;
+    
+    ShapeData outline;
+    outline.SetPolyline( &OutlinePointList );
+
+    outlineProgram.SetColor( 0.0f, 1.0f, 0.0f );
+    outlineProgram.SetDataMatrix( &outline, Eigen::Vector3f( 0.0f, 0.25f, 0.0f ) );
+    
+    outline.InitDraw();
     
     font.Destroy();
     
@@ -71,7 +89,12 @@ int main(int argc, const char * argv[])
         // Render
         glClear( GL_COLOR_BUFFER_BIT );
         
+        TexProgram.UseProgram();
         texture.Draw();
+        
+        outlineProgram.UseProgram();
+        outline.Draw();
+        
         glBindVertexArray( 0 );
         
         // Swap front and back buffers
@@ -85,77 +108,10 @@ int main(int argc, const char * argv[])
     texture.DeleteDraw();
     TexProgram.DeleteProgram();
     
-    glfwTerminate();
-    
-    /*
-    GLFWwindow* window;
-    
-    // Initialize the library
-    if (!glfwInit())
-        return -1;
-    
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-    
-    // Create a windowed mode window and its OpenGL context
-    window = glfwCreateWindow( 300, 300, "FontDraw", NULL, NULL );
-    if (!window) {
-        glfwTerminate();
-        return -1;
-    }
-    
-    // Make the window's context current
-    glfwMakeContextCurrent(window);
-    
-    ShaderProgram program;
-    
-    if( !program.InitProgram() )
-        return -1;
-    
-    // Font
-    FontData font;
-    if( !font.InitFromFile( "/Library/Fonts/Arial Unicode.ttf" ) )
-        return -1;
-    
-    std::vector< std::vector< std::vector< Eigen::Vector2d > > > OutlinePointList;
-    if( !font.CreateOutlinePoint( L"アイウエオ", &OutlinePointList ) )
-        return -1;
-    
-    ShapeData data;
-    data.SetPolyline( &OutlinePointList );
-    
-    font.Destroy();
-    
-    //setting
-    program.SetColor( 0.0f, 1.0f, 0.0f );
-    program.SetDataMatrix( &data, Eigen::Vector3f::Zero() );
-
-    data.InitDraw();
-    
-    // Loop until the user closes the window
-    while( !glfwWindowShouldClose( window ) ) {
-        
-        // Render
-        glClear( GL_COLOR_BUFFER_BIT );
-
-        data.Draw();
-        glBindVertexArray( 0 );
-        
-        // Swap front and back buffers
-        glfwSwapBuffers( window );
-        
-        // Poll for and process events
-        glfwPollEvents();
-        
-    }
-    
-    program.DeleteProgram();
-    data.DeleteDraw();
+    outline.DeleteDraw();
+    outlineProgram.DeleteProgram();
     
     glfwTerminate();
-    */
     
     return 0;
 }

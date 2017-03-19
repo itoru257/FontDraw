@@ -24,7 +24,7 @@ public:
     
     bool InitProgram();
     bool InitProgramFromFile( std::string fname_vertex, std::string fname_fragment );
-    bool InitProgramTexture( Eigen::Matrix< unsigned char, Eigen::Dynamic, Eigen::Dynamic > image );
+    bool InitProgramTexture( Eigen::Matrix< unsigned char, Eigen::Dynamic, Eigen::Dynamic > image, Eigen::Vector3f trans );
     
     bool DeleteProgram();
     
