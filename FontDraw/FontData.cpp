@@ -228,6 +228,8 @@ void FontData::PrintBitmap( Eigen::Matrix< unsigned char, Eigen::Dynamic, Eigen:
 {
     unsigned int i, j, data;
     
+    std::cout << "w = " << image.cols() << ", h = " << image.rows() << std::endl;;
+    
     for( i = 0; i < image.rows(); ++i ) {
         for( j = 0; j < image.cols(); ++j ) {
         
@@ -258,7 +260,7 @@ bool FontData::CreateBitmap( const wchar_t *text, int pixel_size, Eigen::Matrix<
     long bounds[4];
     
     buffer_size_x = pixel_size * ( static_cast< unsigned char >( wcslen( text ) ) + 2 );
-    buffer_size_y = pixel_size * 3;
+    buffer_size_y = static_cast< long >( static_cast< double >( pixel_size ) * 1.35 );
     
     Eigen::Matrix< unsigned char, Eigen::Dynamic, Eigen::Dynamic > buffer;
     buffer = Eigen::Matrix< unsigned char, Eigen::Dynamic, Eigen::Dynamic >::Zero( buffer_size_x, buffer_size_y );
@@ -268,8 +270,8 @@ bool FontData::CreateBitmap( const wchar_t *text, int pixel_size, Eigen::Matrix<
     bounds[2] = buffer_size_y;
     bounds[3] = 0;
     
-    origin_x = 2;
-    origin_y = 2;
+    origin_x = 0;
+    origin_y = 0;
     
     for( const wchar_t *p = text; *p != '\0'; ++p ) {
         
@@ -289,7 +291,7 @@ bool FontData::CreateBitmap( const wchar_t *text, int pixel_size, Eigen::Matrix<
         h = bitmap->rows;
         
         x = origin_x + slot->bitmap_left;
-        y = origin_y + ( pixel_size * 2 - slot->bitmap_top );
+        y = origin_y + ( pixel_size - slot->bitmap_top );
         
         y_min = buffer_size_y - ( y + h );
         y_max = buffer_size_y - y;
@@ -305,7 +307,7 @@ bool FontData::CreateBitmap( const wchar_t *text, int pixel_size, Eigen::Matrix<
                 if( ix >= buffer_size_x || ix < 0 )
                     continue;
                 
-                if( iy >= buffer_size_y || iy < 0 )
+                if( iy > buffer_size_y || iy <= 0 )
                     continue;
                 
                 buffer( ix, buffer_size_y - iy ) = bitmap->buffer[j * bitmap->width + i];
@@ -321,13 +323,11 @@ bool FontData::CreateBitmap( const wchar_t *text, int pixel_size, Eigen::Matrix<
     bounds[0] -= 1;
     bounds[1] += 1;
     
-    bounds[2] -= 0;
-    bounds[3] += 2;
-    
     bounds[0] = ( bounds[0] > 0 ) ? bounds[0] : 0;
     bounds[1] = ( bounds[1] < buffer_size_x ) ? bounds[1] : buffer_size_x;
-    bounds[2] = ( bounds[2] > 0 ) ? bounds[2] : 0;
-    bounds[3] = ( bounds[3] < buffer_size_y ) ? bounds[3] : buffer_size_y;
+
+    bounds[2] = 0;
+    bounds[3] = buffer_size_y;
     
     long image_size_x, image_size_y;
     
