@@ -249,7 +249,7 @@ void FontData::PrintBitmap( Eigen::Matrix< unsigned char, Eigen::Dynamic, Eigen:
     }
 }
 
-bool FontData::CreateBitmap( const wchar_t *text, int pixel_size, Eigen::Matrix< unsigned char, Eigen::Dynamic, Eigen::Dynamic >& image )
+bool FontData::CreateBitmap( const wchar_t *text, int pixel_size, bool base_line_flg, Eigen::Matrix< unsigned char, Eigen::Dynamic, Eigen::Dynamic >& image )
 {
     FT_Set_Pixel_Sizes( m_Face, 0, pixel_size );
     
@@ -326,8 +326,20 @@ bool FontData::CreateBitmap( const wchar_t *text, int pixel_size, Eigen::Matrix<
     bounds[0] = ( bounds[0] > 0 ) ? bounds[0] : 0;
     bounds[1] = ( bounds[1] < buffer_size_x ) ? bounds[1] : buffer_size_x;
 
-    bounds[2] = 0;
-    bounds[3] = buffer_size_y;
+    if( base_line_flg ) {
+        
+        bounds[2] = 0;
+        bounds[3] = buffer_size_y;
+        
+    } else {
+        
+        bounds[2] -= 0;
+        bounds[3] += 2;
+        
+        bounds[2] = ( bounds[2] > 0 ) ? bounds[2] : 0;
+        bounds[3] = ( bounds[3] < buffer_size_y ) ? bounds[3] : buffer_size_y;
+        
+    }
     
     long image_size_x, image_size_y;
     

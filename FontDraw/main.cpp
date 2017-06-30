@@ -54,7 +54,7 @@ int main(int argc, const char * argv[])
     
     //texture
     Eigen::Matrix< unsigned char, Eigen::Dynamic, Eigen::Dynamic > image;
-    if( !font.CreateBitmap( L"アイウエオ", 50, image ))
+    if( !font.CreateBitmap( L"アイウエオ", 50, true, image ))
         return -1;
     
     ShaderProgram TexProgram;

@@ -34,7 +34,7 @@ public:
     void Destroy();
     
     bool CreateOutlinePoint( const wchar_t *text, std::vector< std::vector< std::vector< Eigen::Vector2d > > > *pOutlinePointList );
-    bool CreateBitmap( const wchar_t *text, int pixel_size, Eigen::Matrix< unsigned char, Eigen::Dynamic, Eigen::Dynamic >& image );
+    bool CreateBitmap( const wchar_t *text, int pixel_size, bool base_line_flg, Eigen::Matrix< unsigned char, Eigen::Dynamic, Eigen::Dynamic >& image );
     
     static void PrintOutlinePoint( std::vector< std::vector< std::vector< Eigen::Vector2d > > > *pOutlinePointList );
     static void PrintBitmap( Eigen::Matrix< unsigned char, Eigen::Dynamic, Eigen::Dynamic >& image );
